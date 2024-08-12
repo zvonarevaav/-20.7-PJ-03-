@@ -1,0 +1,54 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Announcements
+{% endblock title %}
+
+{% block content %}
+<h1> Текущее объявление </h1>
+{{ announcement }}
+<hr>
+<table>
+    <tr>
+        <td> Заголовок</td>
+        <td> Категория</td>
+        <td> Дата публикации</td>
+        <td> Содержание</td>
+        <td> Автор</td>
+    </tr>
+    <tr>
+        <td> {{ announcement.announcement_title }}</td>
+        <td>
+            {% for category in announcement.category.all %}
+                <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+            {% endfor %}
+        </td>
+        <td> {{ announcement.announcement_date_time|date:'d M Y l' }}</td>
+        <td> {{ announcement.announcement_text|censor }}</td>
+        <td> {{ announcement.author }}</td>
+    </tr>
+</table>
+<hr>
+<hr>
+<h3> Комментарии к объявлению: </h3>
+{% if comments %}
+    <table>
+            <tr>
+                <td> Сообщение </td>
+                <td> Дата </td>
+                <td> Комментатор </td>
+            </tr>
+            {% for item in comments %}
+            <tr>
+                <td> {{ item.comment_text }} </td>
+                <td> {{ item.comment_date_time|date:'d M Y l' }} </td>
+                <td> {{ item.user }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+{% else %}
+        <h5> Комментариев нет </h5>
+{% endif %}
+{% endblock content %}
